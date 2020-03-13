@@ -16,15 +16,15 @@ int main(int argc, char* argv[])
 
     //printf("Action:%s\nFilename:%s\nID:%s\n", action,filename,id);
 
-    if (strcmp(argv[2],"insert")==0)
+    if (strcmp(argv[2], "insert") == 0)
     {
          printf("The selected action is insert");
     }
-    else if (strcmp(argv[2],"delete")==0)
+    else if (strcmp(argv[2], "delete") == 0)
     {
          printf("The selected action is delete");
     }
-    else if (strcmp(argv[2],"find")==0)
+    else if (strcmp(argv[2], "find") == 0)
     {
          printf("The selected action is find");
     }
