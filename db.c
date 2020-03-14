@@ -4,57 +4,84 @@
 #include <string.h>
 #include <db.h> 
 
-FILE *fptr = NULL;
+db_t *target = NULL;
 
-int db_open(db_t * db, const char * filename){
-    if(access(filename, F_OK) != -1){
-        printf("File Exists! Opening It!\n");
-    }
-    else
-    {
-        printf("File doesn't exist! Creating it!\n");
-    }
-    fptr = fopen(filename, "w+");
-    if(fptr == NULL){
-        printf("Opening/Creating of file failed!");
-        exit(0);
-    }
-    return 0;
+db_t * db_new(){
+    // allocate the memory
+    db_t *new = NULL; // declaring a new node
+    new = (db_t *)malloc(sizeof(db_t));
+    new->content = "";
+    new->right = NULL;
+    new->down = NULL;
+    return new;
 }
 
+
+int db_open(db_t * db, const char * filename){
+    // opens the 'filename' database
+    db_t *current = db;
+    int flag = 0;
+    while (current != NULL){
+        if (strcmp(current->content,filename) == 0) {
+            flag = 1;
+            target = current;
+            return 0;
+        }
+        else
+            current = current->right;
+    }
+    return 1;
+    }
+
 int db_insert(db_t *db, uint64_t id){
-    db_open(db, id);
-    fputs(id, fptr);
-    fprintf(fptr, "\n");
-    fclose(fptr);
+    // insert the id in the database
+    db_t *new_node, *current;
+    current = target;
+    while(current->down != NULL)
+    {
+        current = current->down; // get to the end of the list vertically
+    }
+    new_node = db_new();
+    current->down = new_node;
+    current->down->content = id;
+    current->down->down = NULL;
     return 0;
 }
 
 int db_find(db_t *db, uint64_t id){
-    char buffer[1000], buff[8];
-    db_open(db, id);
-    int totalRead = 0, flag=0;
-    while(fgets(buffer, 1000, fptr) != NULL) 
+    // find id in the database
+    db_t *current = target;
+    while (current->down != NULL)
     {
-        /* Total character read count */
-        totalRead = strlen(buffer);
-        /*
-         * Trim new line character from last if exists.
-         */
-        buffer[totalRead - 1] = buffer[totalRead - 1] == '\n' ? '\0' : buffer[totalRead - 1];
-        //printf("%s\n", buffer);
-        snprintf(buff, 8, id);
-        if (strcmp(buff,buffer)==0)
-            flag = 1;
+        if (strcmp(current->content, id) == 0)
+            return 1;
+        else
+            current = current->down;
     }
     return 0;
 }
 
 int db_delete(db_t *db, uint64_t id){
+    // remove id from the database
+    db_t *current = target, *temp = NULL;
+    // edge case for the length
+    while (current->down != NULL)
+    {
+        if (strcmp(current->down->content, id) == 0)
+        {
+            temp = current->down;
+            current->down = temp->down;
+            db_free(temp);
+            return 1;
+        }
+        else
+            current = current->down;
+    }
+    
     return 0;
 }
 
 void db_free(db_t *db){
-    free();
-    return 0;
+    // free the deleted node
+    free(db);
 }

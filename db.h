@@ -7,7 +7,12 @@
 // Opaque db object
 // TODO define 'struct db' in your private implementation
 // file
-typedef struct db db_t;
+typedef struct db{
+    //uint64_t id;  //unique id
+    //char filename[10];  // filename for the id
+    char *content;  // pointer to the string
+    struct db *down, *right;  // linked list to save the id's
+}db_t;
 
 /**
  * Database constructor 
