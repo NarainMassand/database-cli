@@ -10,7 +10,7 @@
 typedef struct db{
     //uint64_t id;  //unique id
     //char filename[10];  // filename for the id
-    char *content;  // pointer to the string
+    void *content;  // pointer to the string - void *content
     struct db *down, *right;  // linked list to save the id's
 }db_t;
 
