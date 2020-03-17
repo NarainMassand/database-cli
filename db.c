@@ -8,18 +8,25 @@ extern db_t *target;
 
 db_t * db_new(){
     // allocate the memory
-    db_t *new = NULL; // declaring a new node
-    new = (db_t *)malloc(sizeof(db_t));
-    new->content = "";
+    printf("ms1\n");
+    db_t *new; // declaring a new node
+    printf("ms2\n");
+    new = malloc(sizeof(db_t));
+    //new = (db_t *)malloc(sizeof(db_t));
+    printf("ms3\n");
+    //new->content = "";
     new->right = NULL;
     new->down = NULL;
+    printf("ms1\n");
     return new;
 }
 
 int db_open(db_t * db, const char * filename){
     // opens the 'filename' database
     db_t *current = db;
-    while (current != NULL){
+    target = db;
+    while (current != NULL)
+    {
         if (strcmp(current->content,filename) == 0) {
             target = current;
             return 0;
@@ -41,7 +48,8 @@ int db_insert(db_t *db, uint64_t id){
     new_node = db_new();
     current->down = new_node;
     current->down->content = malloc(sizeof(uint64_t));
-    *((uint64_t*) current->down->content) = id;
+    current->down->content = &id;
+    //*((uint64_t*) current->down->content) = &id;
     // current->down->content = id;
     current->down->down = NULL;
     return 0;
@@ -52,7 +60,8 @@ int db_find(db_t *db, uint64_t id){
     db_t *current = db;
     while (current->down != NULL)
     {
-        if (strcmp(current->content, id) == 0)
+        // if (strcmp(current->content, id) == 0)
+        if (current->content == &id)
             return 1;
         else
             current = current->down;
@@ -66,7 +75,8 @@ int db_delete(db_t *db, uint64_t id){
     // edge case for the length
     while (current->down != NULL)
     {
-        if (strcmp(current->down->content, id) == 0)
+        //if (strcmp(current->down->content, id) == 0)
+        if (current->down->content == &id)
         {
             temp = current->down;
             current->down = temp->down;
