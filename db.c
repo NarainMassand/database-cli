@@ -10,9 +10,9 @@ db_t * db_new(){
     // allocate the memory
     printf("ms1\n");
     db_t *new; // declaring a new node
-    printf("ms2\n");
-    new = malloc(sizeof(db_t));
-    //new = (db_t *)malloc(sizeof(db_t));
+    printf("ms2\n %d", sizeof(db_t));
+    //new = malloc(sizeof(db_t));
+    new = (db_t *) malloc (sizeof(db_t));
     printf("ms3\n");
     //new->content = "";
     new->right = NULL;

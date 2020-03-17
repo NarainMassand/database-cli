@@ -13,7 +13,8 @@ int main(int argc, char* argv[])
     int result_open, result_action, choice = -1, req_args = 4;
     // malloc head
     printf("MS1\n");
-    head = (db_t *)malloc(sizeof(db_t));
+    //head = malloc(sizeof(db_t));
+    head = (db_t *) malloc (sizeof(db_t));
     head->down = NULL;
     head->right = NULL;
     *((int*)head->content) = -1; // initializing head
@@ -107,24 +108,25 @@ int main(int argc, char* argv[])
         }
         
         printf("\nEnter 1 to continue or 0 to exit\n");
-        scanf("%d ", &choice);
+        scanf("%d", &choice);
         if (choice == 0)
         {
             return 0;
         }    
-        
         printf("Enter next command in the form dbcli <filename> <action> <id> : ");
-        fgets(input_string, sizeof(input_string), stdin);
+        scanf("%s", input_string);
+        //fgets(input_string, sizeof(input_string), stdin);
         char * token = strtok(input_string, " ");
         int index = 0;
-        argv[index] = token;
+        //argv[index] = token;
         while( token != NULL ) 
-        {
-        index+=1;
-        token = strtok(NULL, " ");
-        argv[index] = token;
+        {   
+            argv[index] = token;
+            index+=1;
+            token = strtok(NULL, " ");
         }
         argc = index;
+        printf("%s %s %s %s\n", argv[0], argv[1], argv[2], argv[3]);
         // for(int index=0 ; index < req_args ; index++)
         //    scanf("%s", &argv[index]);
 
